@@ -1,4 +1,6 @@
 ---
 # defaults file for ansible-osx-command-line-tools
 
-force_install: no
+clt_force_install: no
+clt_softwareupdate_list_timeout: 300
+clt_softwareupdate_install_timeout: 1200

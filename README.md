@@ -17,7 +17,14 @@ None (except running on Mac OS X).
 Role Variables
 --------------
 
-`force_install`: Install the Command Line Tools, even if they are already installed (Default: `no`).
+Going forward, all role variables will be prefixed with `clt_` (for **C**ommand
+**L**ine **T**ools) to avoid ambiguity and namespace collision.
+
+| Variable Name                        | Description                                                               | Default |
+| :---                                 | :---                                                                      |  :---:  |
+| `clt_force_install`                  | Install the Command Line Tools, even if already installed                 |  `no`   |
+| `clt_softwareupdate_list_timeout`    | How long (in seconds) to wait for an available Command Line Tools package |  `300`  |
+| `clt_softwareupdate_install_timeout` | How long (in seconds) to wait for installation of the Command Line Tools  |  `1200` |
 
 Dependencies
 ------------

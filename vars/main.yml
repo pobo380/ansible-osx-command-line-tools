@@ -2,3 +2,4 @@
 # vars file for ansible-osx-command-line-tools
 
 clt_path: /Library/Developer/CommandLineTools
+clt_tmp_file: /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress

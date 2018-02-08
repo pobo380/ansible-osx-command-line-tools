@@ -1,0 +1,46 @@
+---
+# Tasks for performing the installation of the Command Line Tools
+
+- name: Touch tmp file
+  file: path={{ clt_tmp_file }} state=touch
+
+- name: Check for Command Line Tools in Software Update list
+  shell: >
+    /usr/sbin/softwareupdate -l |
+    grep -B 1 -E 'Command Line Tools' |
+    awk -F'*' '/^ +\*/ {print $2}' |
+    sed 's/^ *//' |
+    head -n1
+  register: su_list
+  async: '{{ clt_softwareupdate_list_timeout }}'
+  poll: 0
+  changed_when: false
+
+- name: Wait for softwareupdate list to finish
+  async_status: jid={{ su_list.ansible_job_id }}
+  register: su_list_results
+  failed_when: >-
+    'rc' in su_list_results and su_list_results.rc != 0 or
+    'stdout' in su_list_results and su_list_results.stdout|length == 0
+  until: su_list_results.finished
+  retries: >-
+    {{ (clt_softwareupdate_list_timeout / 10) | round(0, "ceil") | int }}
+  delay: 10
+
+- name: Install Command Line Tools via Software Update
+  command: /usr/sbin/softwareupdate -i '{{ su_list_results.stdout }}'
+  register: su_install
+  async: '{{ clt_softwareupdate_install_timeout }}'
+  poll: 0
+  changed_when: false
+
+- name: Wait for softwareupdate install to finish
+  async_status: jid={{ su_install.ansible_job_id }}
+  register: su_install_results
+  until: su_install_results.finished
+  retries: >-
+    {{ (clt_softwareupdate_install_timeout / 10) | round(0, "ceil") | int }}
+  delay: 10
+
+- name: Cleanup tmp file
+  file: path={{ clt_tmp_file }} state=absent
