@@ -32,7 +32,7 @@ marshmallow==2.15.0
 mccabe==0.6.1
 molecule==2.9.0
 monotonic==1.4
-packaging==16.8
+packaging==17.0
 paramiko==2.4.0
 pathspec==0.5.5
 pbr==3.1.1
